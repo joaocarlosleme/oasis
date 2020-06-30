@@ -1,4 +1,4 @@
-// console.log('package-pre-init start')
+console.log('package-pre-init start');
 import { Session } from 'meteor/session';
 
 web3Obj = new Web3();
@@ -32,7 +32,7 @@ function initWeb3() {
 }
 
 Session.set('web3Interval', web3Interval);
-// console.log('package-pre-init done')
+console.log('package-pre-init done');
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = web3Obj;

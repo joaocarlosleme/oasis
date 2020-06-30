@@ -202,7 +202,7 @@ function checkNetwork() {
         web3Obj.eth.getBlock('latest', (e, res) => {
           if (!e) {
             if (res && res.number >= Session.get('latestBlock')) {
-              Session.set('outOfSync', e != null || (new Date().getTime() / 1000) - res.timestamp > 600);
+              Session.set('outOfSync', e != null || (new Date().getTime() / 1000) - res.timestamp > 60000000); // JON notes: changed from 600 to 6000 because on test we don't create blocks offen
               Session.set('latestBlock', res.number);
               if (Session.get('startBlock') === 0) {
                 console.log(`Setting startblock to ${res.number - 6000}`);
@@ -225,6 +225,7 @@ function checkNetwork() {
         if (isConnected === true) {
           web3Obj.version.getNetwork((e, res) => {
             let network = false;
+            console.log('(JON) Network e param: ' + e + ' res: ' + res);
             if (!e) {
               switch (res) {
                 case '1':
@@ -237,13 +238,16 @@ function checkNetwork() {
                   break;
                 default:
                   network = 'private';
+                  Session.set('AVGBlocksPerDay', 3); // (JON) Added to test bug on history
               }
             }
             if (!Session.equals('network', network)) {
+              console.log('(JON) Network : ' + network);
               initNetwork(network, isConnected);
             }
           });
         } else {
+          console.log('(JON) Network NOT CONNECTED');
           Session.set('isConnected', isConnected);
           Session.set('network', false);
           Session.set('latestBlock', 0);
@@ -318,7 +322,7 @@ Meteor.startup(() => {
       if (Session.get('web3ObjReady')) {
         checkNetwork();
 
-        web3Obj.eth.filter('latest', () => {
+        web3Obj.eth.filter('latest', () => { // (JON) tryed web3Obj.eth.filter({ fromBlock: 20, toBlock: 'latest' }, () => {  // changed from 'web3Obj.eth.filter('latest', () => {'
           Tokens.sync();
           Limits.sync();
           Transactions.sync();

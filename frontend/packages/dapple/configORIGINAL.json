@@ -1,16 +1,12 @@
 {
   "market": {
     "kovan": {
-      "address": "0xe325acB9765b02b8b418199bf9650972299235F4",
-      "blockNumber": 16530576
+      "address": "0x8cf1cab422a0b6b554077a361f8419cdf122a9f9",
+      "blockNumber": 5216718
     },
     "live": {
-      "address": "0x794e6e91555438aFc3ccF1c5076A74F42133d08D",
-      "blockNumber": 9417183
-    },
-    "default": {
-      "address": "0x14b76a719997d50c2c2fa78ac8227f28d633075e",
-      "blocknumber": 3
+      "address": "0x14fbca95be7e99c15cc2996c6c9d841e54b79425",
+      "blockNumber": 4751582
     }
   },
   "tokens": {
@@ -57,10 +53,6 @@
       "GUP": "0xf7b098298f7c69fc14610bf71d5e02c60792894c",
       "BAT": "0x0d8775f648430679a709e98d2b0cb6250d2887ef",
       "NMR": "0x1776e1f26f98b1a5df9cd347953a26dd3cb46671"
-    },
-    "default":{
-      "W-ETH": "0x3231cf3d600ac50f318904ad24e16e2620f2ff98",
-      "MKR": "0x995ef1b61af5561718b02109aa8abce533f21d11"
     }
   }
 }

@@ -46,7 +46,7 @@ class TokensCollection extends Mongo.Collection {
       // const ALL_TOKENS = _.uniq([Session.get('quoteCurrency'), Session.get('baseCurrency')]);
       const ALL_TOKENS = Dapple.getTokens();
 
-      if (network !== 'private') {
+      if (network !== 'privatex') { // (JON) force always run (don't know why for private was getting balance 0)
         // Sync token balances and allowances asynchronously
         ALL_TOKENS.forEach((tokenId) => {
           // XXX EIP20

@@ -89,6 +89,8 @@ Template.registerHelper('loadingTradeHistory', () => Session.get('loadingTradeHi
 
 Template.registerHelper('loadingIndividualTradeHistory', () => Session.get('loadingIndividualTradeHistory'));
 
+//Template.registerHelper('historyCount', () => Session.get('historyCount')); // (JON) ADDED to replace historyCount method (improve performance)
+
 Template.registerHelper('loadedCurrencies', () => Session.get('balanceLoaded') === true
 && Session.get('allowanceLoaded') === true && Session.get('limitsLoaded') === true);
 

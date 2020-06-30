@@ -16,7 +16,7 @@ Dapple['ds-eth-token'] = (function builder() {
     }
 
     this.headers = headers;
-    this._class = _web3.eth.contract(headers.interface);
+    this._class = _web3.eth.contract(headers.interface); // headers.interface = tokenAbi
   }
 
   ContractWrapper.prototype.deploy = function () {

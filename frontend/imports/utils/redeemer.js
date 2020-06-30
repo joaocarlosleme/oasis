@@ -859,6 +859,10 @@ const envConfig = {
     oldMKRAddress: '0xc66ea802717bfb9833400264dd12c2bceaa34a6d',
     redeemerAddress: '0x642ae78fafbb8032da552d619ad43f1d81e4dd7c',
   },
+  default: {
+    oldMKRAddress: '0x3d0735a32d452849713b38837fd05c518929ac6e',
+    redeemerAddress: '0x1b67e963cafbcfd2fc355ca4f055346132058de1',
+  },
 };
 
 class Redeemer {

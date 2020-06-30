@@ -6,6 +6,8 @@ import { txHref } from '/imports/utils/functions';
 
 import './history.html';
 
+//let historyResult = null;
+
 Template.history.viewmodel({
   autorun() {
     if (this.historyType() === 'depositHistory') {
@@ -18,15 +20,18 @@ Template.history.viewmodel({
   currencyClass(token) {
     return token === Session.get('quoteCurrency') ? 'quote-currency' : 'base-currency';
   },
-  historyCount() {
-    return this.history().count();
+  historyCount() { // **** removed to optimize code: added historyCount to Session and placed it on history() because its unnecessary....it runs history all over again just to get count.
+    return Session.get('historyCount') || this.history().count();
   },
   history() {
     const address = Session.get('address');
-    return TokenEvents.find({
+    const historyResult = TokenEvents.find({
       type: { $in: ['deposit', 'withdrawal'] },
       $or: [{ to: address }, { from: address }],
     }, { sort: { blockNumber: -1 } });
+    Session.set('historyCount', historyResult.count());
+    TokenEvents.syncTimestamps(); // (JON) added by John to fix date sync on local blockchain (when latestblock is not updated regularty)
+    return historyResult;
   },
   transferHistory() {
     const address = Session.get('address');

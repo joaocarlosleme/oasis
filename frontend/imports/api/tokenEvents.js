@@ -34,7 +34,7 @@ class TokenEventCollection extends Mongo.Collection {
     const row = {
       blockNumber: event.blockNumber,
       transactionHash: event.transactionHash,
-      timestamp: null,
+      timestamp: null, // event doesn't bring block timestamp info
       token: tokenId,
       type: event.event.toLowerCase(),
     };
@@ -124,6 +124,7 @@ class TokenEventCollection extends Mongo.Collection {
           // TODO: extract duplicated logic for every event in separate abstraction layer
           token.Transfer({ from: address }, {
             fromBlock: latestBlock - (Session.get('AVGBlocksPerDay') * 7), // Last 7 days
+            toBlock: latestBlock - 1 // (JON) Added to avoid duplicating events on last block since last block event is added below
           }).get((err, result) => {
             if (!err) {
               self.syncEvents(tokenId, result);
@@ -142,6 +143,7 @@ class TokenEventCollection extends Mongo.Collection {
 
           token.Transfer({ to: address }, {
             fromBlock: latestBlock - (Session.get('AVGBlocksPerDay') * 7), // Last 7 days
+            toBlock: latestBlock - 1 // (JON) Added to avoid duplicating events on last block since last block event is added on line 136
           }).get((err, result) => {
             if (!err) {
               self.syncEvents(tokenId, result);
@@ -157,9 +159,11 @@ class TokenEventCollection extends Mongo.Collection {
               }
             });
           });
+
           if (tokenId === 'W-ETH') {
             token.Deposit({who: address}, {
               fromBlock: latestBlock - (Session.get('AVGBlocksPerDay') * 7), // Last 7 days
+              toBlock: latestBlock - 1 // (JON) Added to avoid duplicating events on last block since last block event is added below
             }).get((err, result) => {
               if (!err) {
                 self.syncEvents(tokenId, result);
@@ -167,16 +171,18 @@ class TokenEventCollection extends Mongo.Collection {
                   this.setEventLoadingIndicatorStatus(depositEvent.transactionHash, true);
                 });
                 Session.set('loadingWrapHistory', false);
-              }
-              token.Deposit({who: address}, { fromBlock: 'latest' }, (err2, result2) => {
-                if (!err2) {
-                  this.setEventLoadingIndicatorStatus(result2.transactionHash, true);
-                  self.syncEvent(tokenId, result2);
-                }
-              });
+              } // else { // (JON) can't use ELSE here because code below is responsable for monitoring the events and adding async to the page
+                token.Deposit({who: address}, { fromBlock: 'latest' }, (err2, result2) => {
+                  if (!err2) {
+                    this.setEventLoadingIndicatorStatus(result2.transactionHash, true);
+                    self.syncEvent(tokenId, result2);
+                  }
+                });
+              //}
             });
             token.Withdrawal({who: address}, {
               fromBlock: latestBlock - (Session.get('AVGBlocksPerDay') * 7), // Last 7 days
+              toBlock: latestBlock - 1 // (JON) Added to avoid duplicating events on last block since last block event is added below
             }).get((err, result) => {
               if (!err) {
                 self.syncEvents(tokenId, result);

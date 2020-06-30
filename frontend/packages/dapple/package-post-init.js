@@ -13,6 +13,7 @@ Dapple.init = function init(env) {
   }
 
   Dapple.env = predefinedEnv;
+  console.log('(JON) predefinedEnv: ' + predefinedEnv);
   Dapple['maker-otc']['environments'][Dapple.env].otc.value = config.market[Dapple.env].address;
   Dapple['maker-otc']['environments'][Dapple.env].otc.blockNumber = config.market[Dapple.env].blockNumber;
   Dapple['maker-otc'].class(web3Obj, Dapple['maker-otc'].environments[Dapple.env]);
